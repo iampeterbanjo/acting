@@ -7,13 +7,21 @@ import (
 	"strings"
 )
 
-// ActorsNames a string array
-var ActorsNames = []string{}
+// ActorNames from terminal
+var ActorNames = []string{}
+
+type stringReader interface {
+	ReadString(byte) (string, error)
+}
+
+// AskForName gets a name from terminal
+func AskForName(r stringReader)  {
+	fmt.Println("Please enter an actor's name:")
+	name, _ := r.ReadString('\n')
+	name = strings.TrimSpace(name)
+	ActorNames = append(ActorNames, name)
+}
 
 func main() {
-	reader := bufio.NewReader(os.Stdin)
-	fmt.Println("Please enter an actor's name:")
-	name, _ := reader.ReadString('\n')
-	name = strings.TrimSpace(name)
-	fmt.Println(name)
+	AskForName(bufio.NewReader(os.Stdin))
 }
