@@ -36,4 +36,9 @@ func AskForNames(r stringReader) {
 
 func main() {
 	AskForNames(bufio.NewReader(os.Stdin))
+
+	fmt.Printf("You selected the following %d actors: \n", len(ActorNames))
+	for _, v := range ActorNames {
+		fmt.Println(v)
+	}
 }
