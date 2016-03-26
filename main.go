@@ -13,7 +13,7 @@ func Run(in stringReader, out io.Writer) {
 
 	fmt.Printf("You selected the following %d actors: \n", len(ActorNames))
 	for _, v := range ActorNames {
-		fmt.Println(out, v)
+		fmt.Fprintln(out, v)
 	}
 }
 
