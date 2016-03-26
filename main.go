@@ -9,11 +9,11 @@ import (
 
 // Run user interaction
 func Run(in stringReader, out io.Writer) {
-	AskForNames(bufio.NewReader(os.Stdin))
+	AskForNames(in)
 
 	fmt.Printf("You selected the following %d actors: \n", len(ActorNames))
 	for _, v := range ActorNames {
-		fmt.Println(v)
+		fmt.Println(out, v)
 	}
 }
 
