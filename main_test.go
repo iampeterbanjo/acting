@@ -1,7 +1,7 @@
 package main_test
 
 import (
-	"acting-buddies"
+	"acting_buddies"
 	"bytes"
 	"testing"
 

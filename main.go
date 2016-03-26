@@ -9,9 +9,10 @@ import (
 
 // Run user interaction
 func Run(in stringReader, out io.Writer) {
+	ActorNames = []string{}
 	AskForNames(in)
 
-	fmt.Printf("You selected the following %d actors: \n", len(ActorNames))
+	fmt.Fprintf(out, "You selected the following %d actors: \n", len(ActorNames))
 	for _, v := range ActorNames {
 		fmt.Fprintln(out, v)
 	}
