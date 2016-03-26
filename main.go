@@ -29,7 +29,15 @@ func AskForNames(r stringReader) {
 		if len(ActorNames) < 2 {
 			AskForName(r)
 		} else {
-			asking = false
+			fmt.Println("Would you like to add more names? y/n")
+			answer, _ := r.ReadString('\n')
+			answer = strings.ToLower(strings.TrimSpace(answer))
+			switch answer {
+			case "y":
+				AskForName(r)
+			case "n":
+				asking = false
+			}
 		}
 	}
 }
