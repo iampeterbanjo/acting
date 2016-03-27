@@ -59,5 +59,7 @@ func FakeServer(b string, f func()) {
 
 	main.APIRoot = ts.URL
 
+	f()
+
 	main.APIRoot = root
 }

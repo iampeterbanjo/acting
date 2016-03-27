@@ -24,7 +24,7 @@ type Actor struct {
 	Popularity  float64 `json:"popularity"`
 	Name        string  `json:"name"`
 	ID          int     `json:"id"`
-	ProfilePath float64 `json:"profile_path"`
+	ProfilePath string  `json:"profile_path"`
 }
 
 // ActorSearchResults from API
@@ -52,7 +52,7 @@ func FetchActor(name string) (Actor, error) {
 	}
 
 	if results.TotalResults == 0 {
-		return a, fmt.Errorf("There are no search results for: %s!", name)
+		return a, fmt.Errorf("There are no search results for: %s", name)
 	}
 
 	return results.Results[0], nil
