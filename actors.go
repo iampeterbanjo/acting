@@ -1,14 +1,25 @@
 package main
 
-import "os"
+import (
+	"encoding/json"
+	"fmt"
+	"net/http"
+	"net/url"
+	"os"
+)
 
 // APIRoot url for movie info
 var APIRoot = "https://api.themoviedb.org/3"
+var APIKey = ""
 
 // APIKey for movie info
-var APIKey = os.Getenv("TMDB_API_KEY")
 
-// Actor from IMDB
+func init() {
+	APIKey = os.Getenv("TMDB_API_KEY")
+
+}
+
+// Actor from TMDB
 type Actor struct {
 	Popularity  float64 `json:"popularity"`
 	Name        string  `json:"name"`
@@ -24,6 +35,25 @@ type ActorSearchResults struct {
 	TotalResults int     `json:"total_results"`
 }
 
-func fetch(name string) (Actor, error) {
+// FetchActor from TMDB or error
+func FetchActor(name string) (Actor, error) {
+	u := fmt.Sprintf("%s/search/person?api_key=%s&query=%s", APIRoot, APIKey, url.QueryEscape(name))
+	results := ActorSearchResults{}
 
+	res, err := http.Get(u)
+	a := Actor{}
+	if err != nil {
+		return a, err
+	}
+
+	err = json.NewDecoder(res.Body).Decode(&results)
+	if err != nil {
+		return a, err
+	}
+
+	if results.TotalResults == 0 {
+		return a, fmt.Errorf("There are no search results for: %s!", name)
+	}
+
+	return results.Results[0], nil
 }
