@@ -5,9 +5,6 @@ import (
 	"strings"
 )
 
-// ActorNames from terminal
-var ActorNames = []string{}
-
 type stringReader interface {
 	ReadString(byte) (string, error)
 }

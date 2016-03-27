@@ -3,20 +3,27 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"net/url"
 	"os"
+
+	"github.com/joho/godotenv"
 )
 
 // APIRoot url for movie info
 var APIRoot = "https://api.themoviedb.org/3"
-var APIKey = ""
 
 // APIKey for movie info
+var APIKey = ""
 
 func init() {
-	APIKey = os.Getenv("TMDB_API_KEY")
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 
+	APIKey = os.Getenv("TMDB_API_KEY")
 }
 
 // Actor from TMDB
@@ -37,6 +44,7 @@ type ActorSearchResults struct {
 
 // FetchActor from TMDB or error
 func FetchActor(name string) (Actor, error) {
+
 	u := fmt.Sprintf("%s/search/person?api_key=%s&query=%s", APIRoot, APIKey, url.QueryEscape(name))
 	results := ActorSearchResults{}
 
