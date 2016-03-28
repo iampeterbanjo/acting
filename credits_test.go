@@ -53,12 +53,12 @@ func Test_FilterCredits(t *testing.T) {
 
 	brad := main.Actor{Credits: []main.Credit{
 		{ID: 1, Name: "Friends"},
-		{ID: 2, Name: "World War Z"},
+		{ID: 2, Title: "World War Z"},
 	}}
 	jenn := main.Actor{Credits: []main.Credit{
-		{ID: 3, Name: "Along Came Polly"},
+		{ID: 3, Title: "Along Came Polly"},
 		{ID: 1, Name: "Friends"},
-		{ID: 4, Name: "The Break Up"},
+		{ID: 4, Title: "The Break Up"},
 	}}
 
 	actors := []main.Actor{brad, jenn}

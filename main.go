@@ -6,6 +6,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"sync"
 
 	"github.com/markbates/going/wait"
 )
@@ -17,14 +18,30 @@ var ActorNames = []string{}
 func Run(in stringReader, out io.Writer) {
 	AskForNames(in)
 
-	fmt.Fprintf(out, "You selected the following %d actors: \n", len(ActorNames))
+	actors := []Actor{}
+	m := sync.Mutex{}
+
+	fmt.Fprintf(out, "\nYou selected the following %d actors: \n", len(ActorNames))
 	wait.Wait(len(ActorNames), func(i int) {
 		actor, err := FetchActor(ActorNames[i])
 		if err != nil {
-			log.Panic(err)
+			log.Fatal(err)
 		}
+		m.Lock()
+		actors = append(actors, actor)
+		m.Unlock()
 		fmt.Fprintln(out, actor.Name)
 	})
+
+	credits := FilterCredits(actors)
+	if len(credits) > 0 {
+		fmt.Fprintln(out, "\nThey have appeared in the following movies and TV shows together:")
+		for _, c := range credits {
+			fmt.Fprintln(out, c.NameOrTitle())
+		}
+	} else {
+		fmt.Fprintln(out, "\nHave not appeared in anything together.")
+	}
 }
 
 func main() {

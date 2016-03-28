@@ -53,26 +53,19 @@ func FilterCredits(actors []Actor) []Credit {
 	credits := []Credit{}
 
 	a := actors[0]
-	al := len(actors)
 
 	m := sync.Mutex{}
 	wait.Wait(len(a.Credits), func(i int) {
 		c := a.Credits[i]
-		count := 1
 
 		for _, ab := range actors[1:] {
 			for _, ac := range ab.Credits {
 				if ac.ID == c.ID {
-					count++
-					break
+					m.Lock()
+					credits = append(credits, c)
+					m.Unlock()
 				}
 			}
-		}
-
-		if count == al {
-			m.Lock()
-			credits = append(credits, c)
-			m.Unlock()
 		}
 	})
 
