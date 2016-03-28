@@ -1,5 +1,11 @@
 package main
 
+import (
+	"encoding/json"
+	"fmt"
+	"net/http"
+)
+
 // Credit for Actor
 type Credit struct {
 	ID    int    `json:"id"`
@@ -22,5 +28,19 @@ type CreditSearchResults struct {
 
 // FetchCredits for Actor
 func FetchCredits(actor *Actor) error {
+	u := fmt.Sprintf("%s/person/%d/combined_credits?api_key=%s", APIRoot, actor.ID, APIKey)
+	results := CreditSearchResults{}
+
+	res, err := http.Get(u)
+	if err != nil {
+		return err
+	}
+
+	err = json.NewDecoder(res.Body).Decode(&results)
+	if err != nil {
+		return err
+	}
+
+	actor.Credits = results.Cast
 	return nil
 }
