@@ -32,6 +32,7 @@ type Actor struct {
 	Name        string  `json:"name"`
 	ID          int     `json:"id"`
 	ProfilePath string  `json:"profile_path"`
+	Credits     []Credit
 }
 
 // ActorSearchResults from API
