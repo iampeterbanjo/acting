@@ -47,3 +47,22 @@ func Test_FetchCredits_WithoutResults(t *testing.T) {
 		a.Equal(0, len(credits))
 	})
 }
+
+func Test_FilterCredits(t *testing.T) {
+	a := assert.New(t)
+
+	brad := main.Actor{Credits: []main.Credit{
+		{ID: 1, Name: "Friends"},
+		{ID: 2, Name: "World War Z"},
+	}}
+	jenn := main.Actor{Credits: []main.Credit{
+		{ID: 3, Name: "Along Came Polly"},
+		{ID: 1, Name: "Friends"},
+		{ID: 4, Name: "The Break Up"},
+	}}
+
+	actors := []main.Actor{brad, jenn}
+	credits := main.FilterCredits(actors)
+	a.Equal(1, len(credits))
+	a.Equal("Friends", credits[0].NameOrTitle())
+}

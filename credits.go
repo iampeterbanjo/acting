@@ -4,6 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"sync"
+
+	"github.com/markbates/going/wait"
 )
 
 // Credit for Actor
@@ -43,4 +46,35 @@ func FetchCredits(actor *Actor) error {
 
 	actor.Credits = results.Cast
 	return nil
+}
+
+// FilterCredits to find common tv/movies for actors
+func FilterCredits(actors []Actor) []Credit {
+	credits := []Credit{}
+
+	a := actors[0]
+	al := len(actors)
+
+	m := sync.Mutex{}
+	wait.Wait(len(a.Credits), func(i int) {
+		c := a.Credits[i]
+		count := 1
+
+		for _, ab := range actors[1:] {
+			for _, ac := range ab.Credits {
+				if ac.ID == c.ID {
+					count++
+					break
+				}
+			}
+		}
+
+		if count == al {
+			m.Lock()
+			credits = append(credits, c)
+			m.Unlock()
+		}
+	})
+
+	return credits
 }
